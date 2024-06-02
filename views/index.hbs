@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Login Page</title>
+  <style>
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="/css/login.css" rel="stylesheet">
+  <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+<script>
+  function passValues(){
+        var ID = document.getElementById("studentID").value;
+        localStorage.setItem("firstname", ID);
+        return false;
+  }
+        
+</script>
+
+</head>
+
+<body>
+
+  <h2>Login Here</h2>
+  <h3><span class="auto-type"></span></h3>
+
+  <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
+  <script>
+    var typed = new Typed(".auto-type", {
+      strings: ["GPGenius, based on Silver Creek High School"],
+      typeSpeed: 75,
+    })
+  </script>
+  <br>
+
+  <form id="loginForm" action="/auth/index" method="post">
+    <div class="input-box">
+      <i class="fa-solid fa-hashtag"></i>
+      <input type="number" name="studentID" id="studentID" placeholder="Student ID"
+        onkeypress="return event.charCode >= 48 && event.charCode <= 57" required>
+      <span id="studentIDError" class="text-red-500"></span>
+    </div>
+    <input type="submit" class="login-btn" value="Login" onclick="passValues()"></button>
+    {{#if msg}}
+     <button type="button" id="opencalc" onclick="redirectToHome()" class="w-full py-2 px-4 bg-eeaeca hover:bg-blue-600 text-white rounded-md mt-8 transition duration-300 ">Proceed to Calculator</button>
+     <button type="submit" id="openresults" onclick="redirectToResults()" class="w-full py-2 px-4 bg-eeaeca hover:bg-blue-600 text-white rounded-md mt-8 transition duration-300 ">Previously Saved GPAs</button>
+    {{/if}}
+
+  </form>
+
+  <script>
+    function redirectToHome() {
+      window.location.href = "/home";
+    }
+
+    function redirectToResults() {
+      window.location.href = "/results";
+    }
+
+    document.onmousemove = animateCircles; // circle follow mouse
+
+    var colors = ['#FFA7AD', '#FFDCE7', '#F97676']
+
+    function animateCircles(event) {
+       var circle = document.createElement("div");
+       circle.setAttribute("class", "circle");
+       document.body.appendChild(circle); // adds function to body
+
+    // adds motion
+    circle.style.left = event.clientX + 'px';
+    circle.style.top = event.clientY + 'px';
+
+    // randomize color
+    var color = colors[Math.floor(Math.random() * colors.length)];
+    circle.style.borderColor = color;
+
+    // adds animation
+    circle.style.transition = "all 0.5s linear 0s";
+
+    circle.style.left = circle.offsetLeft - 20 + 'px';
+    circle.style.top = circle.offsetTop - 20 + 'px';
+
+    circle.style.width = "50px";
+    circle.style.height = "50px";
+    circle.style.borderWidth = "5px";
+    circle.style.opacity = 0;
+    }
+
+  </script>
+
+  
+  <script src="https://kit.fontawesome.com/e770c84433.js" crossorigin="anonymous"></script>
+  
+  <div class="absolute">
+    <div class="aboslute inset-0 justify-center">
+      <div class="bg-shape1 bg-purple opacity-50 bg-blur"></div>
+      <div class="bg-shape2 bg-pink opacity-50 bg-blur"></div>
+      <div class="bg-shape3 bg-blue opacity-50 bg-blur"></div>
+      <div class="bg-shape4 bg-beige opacity-50 bg-blur"></div>
+    </div>
+  </div>
+
+
+</body>
+
+</html>

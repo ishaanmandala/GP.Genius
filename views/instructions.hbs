@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPA Calculator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="/css/info.css" rel="stylesheet">
+    <style>
+      #backButton {
+          position: absolute;
+          top: 20px;
+          left: 20px;
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          background-color: #eeaeca; 
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          transition: background-color 0.3s ease;
+          z-index: 10;
+      }
+
+      #backButton:hover {
+          background-color: #94bbe9;
+      }
+
+      #backButton svg {
+          fill: #ffffff;
+      }
+
+      li {
+        max-width: 70%;
+        padding-bottom: 5px;
+      }
+
+      p {
+        max-width: 70%;
+      }
+
+      .tips {
+        padding-left: 30%; 
+        padding-top: 5px;
+        padding-bottom: 5px;
+      }
+
+      #improve {
+        margin-right: 10%;
+      }
+    </style>
+</head>
+<body>
+  <nav>
+  <!-- Round arrow button to go back to home.html -->
+  <div id="backButton" onclick="goBack()">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="#ffffff" width="24" height="24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="5" d="M15 19l-7-7 7-7"/>
+      </svg>
+  </div>
+</nav>
+  <div class="aboslute inset-0 justify-center">
+    <div class="bg-shape1 bg-purple opacity-50 bg-blur"></div>
+    <div class="bg-shape2 bg-pink opacity-50 bg-blur"></div>
+    <div class="bg-shape3 bg-blue opacity-50 bg-blur"></div>
+    <div class="bg-shape4 bg-beige opacity-50 bg-blur"></div>
+  </div>
+<main>
+  <section>
+    <h1>About GPGenius</h1>
+  </section>
+  <div class="absolute">
+  </div>
+  <div class="content">
+    <svg viewBox="0 0 1440 4096" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <g class="backers">
+        <path d="M-3317 96H387c276.142 0 500 223.858 500 500v1064.51c0 99.41-80.589 180-180 180H434.99c-99.412 0-180.001 80.58-180.001 180V4248" stroke="red" stroke-width="100" stroke-linecap="round"/>
+        <path d="M4379 804H1387c-276.14 0-499.997 223.86-499.997 500v356.51c0 99.41-80.589 180-180 180H434.991c-99.411 0-180 80.59-180 180V4248" stroke="red" stroke-width="100" stroke-linecap="round"/>
+        <path d="M4423 96H1387.02c-276.14 0-500.001 223.858-500.001 500.001V1660.51c0 99.41-80.589 180-180 180H434.995c-99.411 0-180 80.59-180 180l.001 2227.49" stroke="red" stroke-width="100" stroke-linecap="round"/>
+      </g>
+      <g class="fillers">
+        <path d="M-3317 96H387c276.142 0 500 223.858 500 500v1064.51c0 99.41-80.589 180-180 180H434.99c-99.412 0-180.001 80.58-180.001 180V4248" stroke="red" stroke-width="100" stroke-linecap="round"/>
+        <path d="M4379 804H1387c-276.14 0-499.997 223.86-499.997 500v356.51c0 99.41-80.589 180-180 180H434.991c-99.411 0-180 80.59-180 180V4248" stroke="red" stroke-width="100" stroke-linecap="round"/>
+        <path d="M4423 96H1387.02c-276.14 0-500.001 223.858-500.001 500.001V1660.51c0 99.41-80.589 180-180 180H434.995c-99.411 0-180 80.59-180 180l.001 2227.49" stroke="red" stroke-width="100" stroke-linecap="round"/>
+      </g>
+    </svg>
+    <section>
+      <h2>What is GPGenius?</h2>
+      <p>GPGenius is an intelligent GPA calculator aimed toward Silver Creek High School's students. It includes many unique features, geared to create an ideal user experience and ease of navigation. Silver Creek High School does not include weighted GPAs on a student's transcript, and it is therefore up to the student to manually calculate their own weighted GPA. This may become confusing if the student is taking multiple AP courses or has varying letter grades in them. GPGenius has the instantaneous ability to calculate both weighted and unweighted GPAs, equipped with an intelligent function to save a student's results and a form-submit feature for a streamlined Question-and-Answer process.</p>
+    </section>
+    <section>
+      <h2>Instructions</h2>
+      <li>Login with your Student ID.</li>
+      <li>If you have previously used GPGenius and saved your scores, you have the option to view your last saved results or proceed to the calculator.</li>
+      <li>Enter the amount of classes you wish to calculate the GPA for.</li>
+      <li>Type in the name of each class for easier tracking.</li>
+      <li>Select the precise letter grade for each class from the drop-down menus.</li>
+      <li>Select the type of class you are taking from the drop-down menus.</li>
+      <li>Repeat steps 4-6 for the number of classes you inputted.</li>
+      <li>Click Calculate GPA to receive both your weighted and unweighted GPA.</li>
+      <li>Optional: Click the Save GPA button to save your results to your ID. It will appear the next time you log in.</li>
+    </section>
+    <section>
+      <h2 id="improve">Tips to Improve Your GPA</h2>
+      <li class="tips">Create a study schedule and stick to it! Set aside free time to complete homework ahead of the deadlines or study for your classes. Persistence is key!</li>
+      <li class="tips">Do your work well before the deadline! Do not procrastinate projects and assignments until the last minute. This will cause you stress and your performance will appear rushed.</li>
+      <li class="tips">Ask for help! Talk to your teachers and your peers on confusing material and concepts. Visit a teacher at break or lunch if they are open. Silver Creek also offers bilingual tutors in the library every Tuesday and Thursday after school until 5 PM.</li>
+    </section>
+    <section>
+      <img src="/images/logo.png">
+    </section>
+  </div>
+</main>
+  <script>
+    function goBack() {
+     window.location.href = "home";
+    }
+  </script>
+</body>

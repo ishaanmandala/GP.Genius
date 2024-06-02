@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPA Calculator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css"> 
+    <style>
+        body {
+            background: rgb(238,174,202);
+            background: radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(165,206,255,1) 100%);
+            font-family: 'Poppins', sans-serif;
+        }
+        .text-blue-500 {
+            color: #eeaeca;
+        }
+        .button-style {
+            background-color: #eeaeca;
+            color: #FFFFFF; 
+        }
+        .button-style:hover {
+            background-color: #94bbe9; 
+        }
+        #classQuestion, #idNumberLabel {
+            color: #eeaeca; 
+        }
+        .dropdown-menu {
+            position: absolute;
+            top: 4rem;
+            right: 1rem;
+            background-color: #ffffff;
+            border: 1px solid #ccc;
+            border-radius: 0.25rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+            display: none;
+        }
+        .dropdown-menu a {
+            display: block;
+            padding: 0.5rem 1rem;
+            color: #333333;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        .dropdown-menu a:hover {
+            background-color: #f3f4f6;
+        }
+        .double-exclamation-button {
+            background-color: #eeaeca;
+            color: #FFFFFF;
+        }
+        .double-exclamation-button:hover {
+          background-color: #94bbe9;
+        }
+        .question-button {
+            background-color: #eeaeca;
+            color: #FFFFFF; 
+        }
+        .question-button:hover {
+          background-color: #94bbe9;
+        }
+        .results-button {
+          position: absolute;
+          margin-left: 44%;
+        }
+        .icon {
+          margin-top: 30%;
+          scale: 1.20;
+        }
+    </style>
+</head>
+<body>
+<form id="CalForm"  action="/auth/home" method = "post">
+
+
+<div class="container mx-auto px-4 py-8 bg-white relative font-poppins rounded-lg" style="width: calc((70vw - 40px) * (18 / 20)); max-width: 640px; padding-top: 20%;">
+
+    <!-- ? button -->
+    <button onclick="toggleDropdown()" title="Options" class="absolute top-4 left-4 bg-eeaeca hover:bg-blue-600 text-eeaeca font-semibold rounded-full w-10 h-10 flex items-center justify-center shadow-md transition duration-300 double-exclamation-button">!!</button>
+
+    <!-- Results Page -->
+    <button onclick="goResults()" title="Results" class="absolute top-4 bg-eeaeca hover:bg-blue-600 text-white font-semibold rounded-full w-10 h-10 flex items-center justify-center shadow-md transition duration-300 question-button results-button"><img src="/images/icon.png" class="icon"></button>
+
+    <!-- Dropdown menu -->
+    <button onclick="openInfo()" title="About GPGenius" class="absolute top-4 left-4 bg-eeaeca hover:bg-blue-600 text-white font-semibold rounded-full w-10 h-10 flex items-center justify-center shadow-md transition duration-300 question-button">!!</button>
+    
+    <img src="/images/logo.png" alt="GPGenius Logo" class="absolute top-10 left-1/2 transform -translate-x-1/2" style="width: 200px; height: 250px;">
+
+    <!-- ? button -->
+    <button onclick="openQA()" title="QA" class="absolute top-4 right-4 bg-eeaeca hover:bg-blue-600 text-white font-semibold rounded-full w-10 h-10 flex items-center justify-center shadow-md transition duration-300 question-button">?</button>
+
+  <h1>GPA Calculator</h1>
+  
+        <div class="mb-4">
+            <label id="classQuestion" for="numClasses" class="block font-medium text-eeaeca">How many classes are you taking?</label>
+          <h4><span class="auto-type"></span></h4>
+
+          <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
+          <script>
+            var typed = new Typed(".auto-type", {
+              strings: ["To calculate multiple years' GPAs, input the total amount of classes taken to present."],
+              typeSpeed: 40,
+            })
+            </script>
+            <input type="number" id="numClasses" min="1" required class="mt-1 block w-full rounded-md bg-gray-200 border-transparent focus:border-blue-500 focus:bg-white focus:ring-0">
+        </div>
+
+        <button onclick="createInputFields()" class="w-full py-2 px-4 button-style">Submit</button>
+
+    
+
+    <div id="classInputs" class="mt-8"></div>
+
+    <button type ="button" onclick="calculateGPA()" class="w-full py-2 px-4 bg-eeaeca hover:bg-blue-600 text-white font-semibold rounded-md mt-8 transition duration-300 button-style">Calculate GPA</button>
+
+
+    <div id="result" class="mt-8"></div>
+
+
+    <input type="hidden" name="Id1" id="Id1" value="" />
+
+    <input type="hidden" name="UWGpa" id="UWGpa" value="" />
+
+    <input type="hidden" name="WGpa" id="WGpa" value="" />
+
+
+    <button type="button" id="saveGpaBtn" onclick="seeResults()" class="w-full py-2 px-4 bg-eeaeca hover:bg-blue-600 text-white font-semibold rounded-md mt-8 transition duration-300 hidden button-style">Save GPA?</button>
+
+</div>
+</form>
+</body>
+
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+<script>
+
+    // Define a dictionary to store the data
+function redirectToHome() {
+  var studentID = document.getElementById("studentID").value.trim();
+  if (studentID !== "") {
+    // Redirect only if the studentID field is not empty
+    window.location.href = "home";
+  } else {
+    // Display a message to fill out the form
+    alert("Please fill out with your Student ID.");
+  }
+}
+
+// Function to create input fields for classes
+function createInputFields() {
+    var idNumber = document.getElementById('idNumber').value.trim();
+
+    // Check if ID number is filled
+    if (idNumber === "") {
+        alert("Please fill in the ID number first.");
+        return;
+    }
+
+    var numClasses = parseInt(document.getElementById('numClasses').value);
+    var classInputsDiv = document.getElementById('classInputs');
+    classInputsDiv.innerHTML = '';
+
+    // Array to store classes for this grade
+    var classes = [];
+
+    for (var i = 1; i <= numClasses; i++) {
+        var className = document.getElementById('class' + i).value.trim();
+        var grade = document.getElementById('grade' + i).value.trim().toUpperCase();
+
+        // Store class in the classes array
+        classes.push({ name: className, grade: grade });
+    }
+
+    // Store GPA, ID number, grade, and classes for this grade in the dictionary (SAVING)
+    gradeData[idNumber] = {
+        grade: grade,
+        classes: classes
+    };
+}
+// Function to create input fields for classes
+function createInputFields() {
+    var numClasses = parseInt(document.getElementById('numClasses').value);
+    var classInputsDiv = document.getElementById('classInputs');
+    classInputsDiv.innerHTML = '';
+
+
+    for (var i = 1; i <= numClasses; i++) {
+        var div = document.createElement('div');
+        div.className = 'mb-4';
+        div.innerHTML = '<label for="class' + i + '" class="block font-medium text-blue">Class ' + i + ':</label>' +
+            '<input type="text" id="class' + i + '" placeholder="Class Name" required class="mt-1 block w-full rounded-md bg-gray-200 border-transparent focus:border-blue-500 focus:bg-white focus:ring-0">' +
+            '<label for="grade' + i + '" class="block font-medium text-blue">Grade:</label>' +
+            '<select id="grade' + i + '" class="mt-1 block w-full rounded-md bg-gray-200 border-transparent focus:border-blue-500 focus:bg-blue focus:ring-0">' +
+            '<option value="A+">A+</option>' +
+            '<option value="A">A</option>' +
+            '<option value="A-">A-</option>' +
+            '<option value="B+">B+</option>' +
+            '<option value="B">B</option>' +
+            '<option value="B-">B-</option>' +
+            '<option value="C+">C+</option>' +
+            '<option value="C">C</option>' +
+            '<option value="C-">C-</option>' +
+            '<option value="D+">D+</option>' +
+            '<option value="D">D</option>' +
+            '<option value="D-">D-</option>' +
+            '<option value="F">F</option>' +
+            '</select>' +
+            '<label for="type' + i + '" class="block font-medium text-blue">Course Type:</label>' +
+            '<select id="type' + i + '" class="mt-1 block w-full rounded-md bg-gray-200 border-transparent focus:border-blue-500 focus:bg-blue focus:ring-0">' +
+            '<option value="regular">Regular</option>' +
+            '<option value="AP">AP</option>' 
+            '</select>';
+        classInputsDiv.appendChild(div);
+    }
+}
+
+//Calculates UnweightedGPA (DOES NOT take into consideration AP)
+function calculateUnweightedGPA(numClasses) {
+    var totalGradePoints = 0;
+
+    for (var i = 1; i <= numClasses; i++) {
+        var grade = document.getElementById('grade' + i).value.trim().toUpperCase();
+
+        var gradePoints;
+
+        switch (grade) {
+            case 'A+':
+            case 'A':
+            case 'A-':
+                gradePoints = 4.0;
+                break;
+            case 'B+':
+            case 'B':
+            case 'B-':
+                gradePoints = 3.0;
+                break;
+            case 'C+':
+            case 'C':
+            case 'C-':
+                gradePoints = 2.0;
+                break;
+            case 'D+':
+            case 'D':
+            case 'D-':
+                gradePoints = 1.0;
+                break;
+            case 'F':
+                gradePoints = 0;
+                break;
+            default:
+                alert('Invalid grade entered for class ' + i);
+                return;
+        }
+
+        totalGradePoints += gradePoints;
+    }
+
+    var unweightedGPA = totalGradePoints / numClasses;
+    return unweightedGPA;
+}
+
+//Calculates WeightedGPA (takes into consideration AP)
+function calculateWeightedGPA(numClasses) {
+    var totalCredits = 0;
+    var totalWeightedGradePoints = 0;
+
+    for (var i = 1; i <= numClasses; i++) {
+        var grade = document.getElementById('grade' + i).value.trim().toUpperCase();
+        var type = document.getElementById('type' + i).value;
+
+        var gradePoints;
+
+        switch (grade) {
+            case 'A+':
+            case 'A':
+            case 'A-':
+                gradePoints = 4.0;
+                break;
+            case 'B+':
+            case 'B':
+            case 'B-':
+                gradePoints = 3.0;
+                break;
+            case 'C+':
+            case 'C':
+            case 'C-':
+                gradePoints = 2.0;
+                break;
+            case 'D+':
+            case 'D':
+            case 'D-':
+                gradePoints = 1.0;
+                break;
+            case 'F':
+                gradePoints = 0;
+                break;
+            default:
+                alert('Invalid grade entered for class ' + i);
+                return;
+        }
+
+        if (type === 'AP') {
+            gradePoints += 1;
+        }
+        // According to Silver Creek High School, Each class has 5 credits
+        totalCredits += 5; 
+        totalWeightedGradePoints += gradePoints * 5; // Multiply by the credits for weighted GPA
+    }
+    // WeightedGPA = (WeightedPoints (ie: A:5)/(TotalCredits:5))))
+    var weightedGPA = totalWeightedGradePoints / totalCredits;
+    return weightedGPA;
+}
+
+//Prints the GPA and Provides the Option to save the GPA, Only after the GPA is displayes
+function calculateGPA() {
+    var numClasses = parseInt(document.getElementById('numClasses').value);
+
+    var unweightedGPA = calculateUnweightedGPA(numClasses);
+    var weightedGPA = calculateWeightedGPA(numClasses);
+
+    var name = localStorage.getItem("firstname");
+
+    document.getElementById('result').innerHTML = 'Your Unweighted GPA is: ' + unweightedGPA.toFixed(2) +
+        '<br>Your Weighted GPA is: ' + weightedGPA.toFixed(2);
+    
+    document.getElementById('UWGpa').innerHTML =  unweightedGPA.toFixed(2);
+        
+    document.getElementById('WGpa').innerHTML =   weightedGPA.toFixed(2);
+    document.getElementById('Id1').innerHTML =   name;
+
+
+    //Save GPA button
+    document.getElementById('saveGpaBtn').classList.remove('hidden');
+
+    document.getElementById('UWGpa').value=unweightedGPA.toFixed(2);
+    document.getElementById('WGpa').value=weightedGPA.toFixed(2);
+    document.getElementById('Id1').value= name;
+}
+
+//Opens Instructions Page
+function openInstructions() {
+    window.location.href = "instructions"; 
+}
+
+//Opens Question Page
+  function openQA() {
+      window.location.href = "qa"; 
+  }
+
+function openInfo() {
+    window.location.href = "instructions"; 
+}
+
+function goResults() {
+    window.location.href = "results"; 
+}
+
+function seeResults(){
+    swal({
+    title: "Congratulations!",
+    text: "You have saved your GPA",
+    type: "results",
+     }).then(function(){ 
+      document.getElementById('form').submit();
+  } );
+}
+
+</script>
